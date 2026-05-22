@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 body {
@@ -48,6 +49,7 @@ header p {
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
+  cursor: pointer;
 }
 
 #btn-tema:hover {
@@ -107,9 +109,12 @@ h2 {
 }
 
 .campo-form input:focus,
-.campo-form select:focus {
+.campo-form select:focus,
+.controllo-item input:focus,
+.controllo-item select:focus {
   outline: none;
   border-color: #9cbfa2;
+  box-shadow: 0 0 5px rgba(156, 191, 162, 0.3);
 }
 
 .btn-aggiungi {
@@ -122,6 +127,7 @@ h2 {
   border-radius: 6px;
   font-weight: bold;
   margin-left: 25px;
+  cursor: pointer;
 }
 
 .btn-aggiungi:hover {
@@ -249,25 +255,20 @@ h2 {
   margin-top: -30px;
 }
 
-.btn-stato-visitato {
-  background: #9cbfa2;
+.btn-stato-visitato, .btn-stato-da-visitare {
   color: #ffffff;
   border: none;
   padding: 6px 14px;
   border-radius: 20px;
   font-weight: 500;
   font-size: 0.88rem;
+  cursor: pointer;
+  opacity: 0.9;
 }
 
-.btn-stato-da-visitare {
-  background: #9ac5e8;
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 500;
-  font-size: 0.88rem;
-}
+.btn-stato-visitato:hover, .btn-stato-da-visitare:hover { opacity: 1; }
+.btn-stato-visitato { background: #9cbfa2; }
+.btn-stato-da-visitare { background: #9ac5e8; }
 
 .btn-modifica, .btn-elimina {
   background: #fbf7f0;
@@ -277,11 +278,12 @@ h2 {
   font-size: 0.85rem;
   margin-left: 6px;
   color: #3a4738;
+  cursor: pointer;
 }
 
 .btn-modifica:hover { background: #e5dfd3; }
 .btn-elimina { color: #cc8383; }
-.btn-elimina:hover { background: #fcdede; }
+.btn-elimina:hover { background: #fcdede; border-color: #cc8383; }
 
 footer {
   text-align: center;
@@ -300,3 +302,30 @@ footer {
   padding: 12px 24px;
   border-radius: 8px;
 }
+
+body.dark-mode { background: #181818; color: #e0e0e0; }
+body.dark-mode header { background: #252525; border-bottom: 1px solid #444; }
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #fff; }
+body.dark-mode .sezione-form, body.dark-mode .sezione-controlli, 
+body.dark-mode .box-statistiche, body.dark-mode .meta-item {
+  background: #252525;
+  border-color: #444;
+}
+body.dark-mode .campo-form input, body.dark-mode .campo-form select,
+body.dark-mode .controllo-item input, body.dark-mode .controllo-item select {
+  background: #181818;
+  border-color: #444;
+  color: #fff;
+}
+body.dark-mode .campo-form label, body.dark-mode .controllo-item label { color: #bbb; }
+body.dark-mode .testo-meta { color: #fff; }
+body.dark-mode .dettaglio-meta { color: #999; }
+body.dark-mode .btn-modifica, body.dark-mode .btn-elimina {
+  background: #333;
+  border-color: #555;
+  color: #eee;
+}
+body.dark-mode .btn-modifica:hover { background: #444; }
+body.dark-mode footer { color: #888; }
+body.dark-mode .barra-grigia { background: #333; }
+body.dark-mode #barra-riempimento { background: #c58d59; }
