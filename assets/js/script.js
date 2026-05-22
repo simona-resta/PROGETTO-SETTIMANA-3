@@ -61,35 +61,47 @@ function render() {
   else if (ordine === "meta-az") visualizzati.sort((a, b) => a.meta.localeCompare(b.meta));
   else if (ordine === "meta-za") visualizzati.sort((a, b) => b.meta.localeCompare(a.meta));
 
+  const raggruppati = visualizzati.reduce((acc, m) => {
+    if (!acc[m.categoria]) acc[m.categoria] = [];
+    acc[m.categoria].push(m);
+    return acc;
+  }, {});
+
   container.innerHTML = "";
 
   if (visualizzati.length === 0) {
     container.innerHTML = `<li class="meta-item" style="text-align: center; color: #6b7566;">Nessuna meta trovata</li>`;
   } else {
-    visualizzati.forEach((m, index) => {
-      const li = document.createElement("li");
-      li.className = `meta-item ${m.visitato ? "visitato" : "da-visitare"}`;
-      li.innerHTML = `
-        <span class="testo-meta">${m.meta}</span>
-        <span class="dettaglio-meta">${m.continente} — ${m.anno} — <strong>${m.categoria}</strong></span>
-        <div class="gruppo-pulsanti">
-          <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}">
-            ${m.visitato ? "Visitato" : "Da visitare"}
-          </button>
-          <button class="btn-modifica">Modifica</button>
-          <button class="btn-elimina">Elimina</button>
-        </div>
-      `;
+    Object.keys(raggruppati).forEach(cat => {
+      const h3 = document.createElement("h3");
+      h3.textContent = cat;
+      container.appendChild(h3);
 
-      li.querySelector("button").onclick = () => { m.visitato = !m.visitato; render(); };
-      li.querySelector(".btn-elimina").onclick = () => { 
-          mete.splice(mete.indexOf(m), 1); 
-          render(); 
-          mostraNotifica("Meta eliminata");
-      };
-      li.querySelector(".btn-modifica").onclick = () => avviaModifica(m, li);
+      raggruppati[cat].forEach((m) => {
+        const li = document.createElement("li");
+        li.className = `meta-item ${m.visitato ? "visitato" : "da-visitare"}`;
+        li.innerHTML = `
+          <span class="testo-meta">${m.meta}</span>
+          <span class="dettaglio-meta">${m.continente} — ${m.anno} — <strong>${m.categoria}</strong></span>
+          <div class="gruppo-pulsanti">
+            <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}">
+              ${m.visitato ? "Visitato" : "Da visitare"}
+            </button>
+            <button class="btn-modifica">Modifica</button>
+            <button class="btn-elimina">Elimina</button>
+          </div>
+        `;
 
-      container.appendChild(li);
+        li.querySelector("button").onclick = () => { m.visitato = !m.visitato; render(); };
+        li.querySelector(".btn-elimina").onclick = () => { 
+            mete.splice(mete.indexOf(m), 1); 
+            render(); 
+            mostraNotifica("Meta eliminata");
+        };
+        li.querySelector(".btn-modifica").onclick = () => avviaModifica(m, li);
+
+        container.appendChild(li);
+      });
     });
   }
 
