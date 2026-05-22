@@ -33,6 +33,14 @@
           <input id="input-anno" type="number" placeholder="2024" />
         </div>
         <div class="campo-form">
+          <label>Categoria</label>
+          <select id="input-categoria">
+            <option value="Relax">Relax</option>
+            <option value="Avventura">Avventura</option>
+            <option value="Culturale">Culturale</option>
+          </select>
+        </div>
+        <div class="campo-form">
           <label>Stato</label>
           <select id="select-stato">
             <option value="false">Da visitare</option>
@@ -61,6 +69,16 @@
         </select>
       </div>
 
+      <div class="controllo-item categoria-medio">
+        <label>Categoria</label>
+        <select id="filtro-categoria">
+          <option value="tutti">Tutte</option>
+          <option value="Relax">Relax</option>
+          <option value="Avventura">Avventura</option>
+          <option value="Culturale">Culturale</option>
+        </select>
+      </div>
+
       <div class="controllo-item ordine-medio">
         <label>Ordine</label>
         <select id="ordine-selezionato">
@@ -77,71 +95,20 @@
         <h3>Mete</h3>
         
         <div class="numeri-stat">
-          <div class="stat-blocco"><strong id="stat-totale">5</strong><br>Totale</div>
-          <div class="stat-blocco text-verde"><strong id="stat-visitati">3</strong><br>Visitati</div>
-          <div class="stat-blocco text-blu"><strong id="stat-da-visitare">2</strong><br>Da visitare</div>
+          <div class="stat-blocco"><strong id="stat-totale">0</strong><br>Totale</div>
+          <div class="stat-blocco text-verde"><strong id="stat-visitati">0</strong><br>Visitati</div>
+          <div class="stat-blocco text-blu"><strong id="stat-da-visitare">0</strong><br>Da visitare</div>
         </div>
 
         <p>Percentuale visti</p>
         <div class="barra-grigia">
-          <div id="barra-riempimento" style="width: 60%;"></div>
+          <div id="barra-riempimento" style="width: 0%;"></div>
         </div>
       </div>
     </section>
 
     <section class="sezione-lista">
       <ul id="lista-mete">
-        
-        <li class="meta-item visitato">
-          <span class="testo-meta">Tokyo</span>
-          <span class="dettaglio-meta">Asia — 2019</span>
-          <div class="gruppo-pulsanti">
-            <button class="btn-stato-visitato">Visitato</button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
-          </div>
-        </li>
-
-        <li class="meta-item visitato">
-          <span class="testo-meta">Parigi</span>
-          <span class="dettaglio-meta">Europa — 2021</span>
-          <div class="gruppo-pulsanti">
-            <button class="btn-stato-visitato">Visitato</button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
-          </div>
-        </li>
-
-        <li class="meta-item visitato">
-          <span class="testo-meta">Roma</span>
-          <span class="dettaglio-meta">Europa — 2023</span>
-          <div class="gruppo-pulsanti">
-            <button class="btn-stato-visitato">Visitato</button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
-          </div>
-        </li>
-
-        <li class="meta-item da-visitare">
-          <span class="testo-meta">New York</span>
-          <span class="dettaglio-meta">America — 2025</span>
-          <div class="gruppo-pulsanti">
-            <button class="btn-stato-da-visitare">Da visitare</button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
-          </div>
-        </li>
-
-        <li class="meta-item da-visitare">
-          <span class="testo-meta">Londra</span>
-          <span class="dettaglio-meta">Europa — 2026</span>
-          <div class="gruppo-pulsanti">
-            <button class="btn-stato-da-visitare">Da visitare</button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
-          </div>
-        </li>
-
       </ul>
     </section>
 
@@ -150,6 +117,8 @@
   <footer>
     <p>&copy; 2026 Il mio Passaporto Virtuale</p>
   </footer>
+
+  <div id="notifica">Meta aggiornata!</div>
 
   <script src="assets/js/script.js"></script>
 </body>
