@@ -367,3 +367,30 @@ body.dark-mode .edit-input {
   border-color: #444;
   color: #fff;
 }
+
+[data-action="up"], [data-action="down"] {
+  background: #fbf7f0;
+  border: 1px solid #cbd5c5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-left: 6px;
+  color: #3a4738;
+  cursor: pointer;
+}
+
+[data-action="up"]:hover, [data-action="down"]:hover {
+  background: #e5dfd3;
+}
+
+body.dark-mode [data-action="up"], 
+body.dark-mode [data-action="down"] {
+  background: #333;
+  border-color: #555;
+  color: #eee;
+}
+
+body.dark-mode [data-action="up"]:hover, 
+body.dark-mode [data-action="down"]:hover {
+  background: #444;
+}

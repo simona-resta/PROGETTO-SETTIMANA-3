@@ -61,39 +61,52 @@ function render() {
   else if (ordine === "meta-az") visualizzati.sort((a, b) => a.meta.localeCompare(b.meta));
   else if (ordine === "meta-za") visualizzati.sort((a, b) => b.meta.localeCompare(a.meta));
 
-  const raggruppati = visualizzati.reduce((acc, m) => {
-    if (!acc[m.categoria]) acc[m.categoria] = [];
-    acc[m.categoria].push(m);
-    return acc;
-  }, {});
-
+  container.className = vista;
   container.innerHTML = "";
 
   if (visualizzati.length === 0) {
     container.innerHTML = `<li class="meta-item" style="text-align: center; color: #6b7566;">Nessuna meta trovata</li>`;
   } else {
-    Object.keys(raggruppati).forEach(cat => {
-      const h3 = document.createElement("h3");
-      h3.textContent = cat;
-      container.appendChild(h3);
+    if (vista === "tabella") {
+        container.innerHTML = `<table><thead><tr><th>Meta</th><th>Continente</th><th>Anno</th></tr></thead><tbody id="tabella-body"></tbody></table>`;
+        const body = document.getElementById("tabella-body");
+        visualizzati.forEach(m => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${m.meta}</td><td>${m.continente}</td><td>${m.anno}</td>`;
+            body.appendChild(tr);
+        });
+    } else {
+        const raggruppati = visualizzati.reduce((acc, m) => {
+            if (!acc[m.categoria]) acc[m.categoria] = [];
+            acc[m.categoria].push(m);
+            return acc;
+        }, {});
 
-      raggruppati[cat].forEach((m) => {
-        const li = document.createElement("li");
-        li.className = `meta-item ${m.visitato ? "visitato" : "da-visitare"}`;
-        li.innerHTML = `
-          <span class="testo-meta">${m.meta}</span>
-          <span class="dettaglio-meta">${m.continente} — ${m.anno} — <strong>${m.categoria}</strong></span>
-          <div class="gruppo-pulsanti">
-            <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}" data-id="${m.id}">
-              ${m.visitato ? "Visitato" : "Da visitare"}
-            </button>
-            <button class="btn-modifica" data-id="${m.id}">Modifica</button>
-            <button class="btn-elimina" data-id="${m.id}">Elimina</button>
-          </div>
-        `;
-        container.appendChild(li);
-      });
-    });
+        Object.keys(raggruppati).forEach(cat => {
+            const h3 = document.createElement("h3");
+            h3.textContent = cat;
+            container.appendChild(h3);
+
+            raggruppati[cat].forEach((m) => {
+                const li = document.createElement("li");
+                li.className = `meta-item ${m.visitato ? "visitato" : "da-visitare"}`;
+                li.innerHTML = `
+                  <span class="testo-meta">${m.meta}</span>
+                  <span class="dettaglio-meta">${m.continente} — ${m.anno} — <strong>${m.categoria}</strong></span>
+                  <div class="gruppo-pulsanti">
+                    <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}" data-id="${m.id}" data-action="toggle">
+                      ${m.visitato ? "Visitato" : "Da visitare"}
+                    </button>
+                    <button class="btn-modifica" data-id="${m.id}" data-action="modifica">Modifica</button>
+                    <button class="btn-elimina" data-id="${m.id}" data-action="elimina">Elimina</button>
+                    <button data-id="${m.id}" data-action="up">↑</button>
+                    <button data-id="${m.id}" data-action="down">↓</button>
+                  </div>
+                `;
+                container.appendChild(li);
+            });
+        });
+    }
   }
 
   const tot = mete.length;
@@ -119,7 +132,6 @@ function render() {
 /* SCRIVI QUI LA TUA RISPOSTA */
 document.getElementById("form-viaggio").addEventListener("submit", (e) => {
   e.preventDefault();
-  
   const meta = document.getElementById("input-meta").value.trim();
   const continente = document.getElementById("input-continente").value.trim();
   const anno = document.getElementById("input-anno").value.trim();
@@ -131,15 +143,7 @@ document.getElementById("form-viaggio").addEventListener("submit", (e) => {
     return;
   }
 
-  mete.push({
-    id: Date.now(),
-    meta,
-    continente,
-    anno,
-    categoria,
-    visitato
-  });
-  
+  mete.push({ id: Date.now(), meta, continente, anno, categoria, visitato });
   e.target.reset();
   render();
   mostraNotifica("Meta aggiunta");
@@ -156,20 +160,27 @@ document.getElementById("form-viaggio").addEventListener("submit", (e) => {
 document.getElementById("lista-mete").addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (!btn) return;
-  
   const id = parseInt(btn.dataset.id);
-  const m = mete.find(el => el.id === id);
-  if (!m) return;
+  const action = btn.dataset.action;
+  const idx = mete.findIndex(m => m.id === id);
+  if (idx === -1) return;
 
-  if (btn.classList.contains("btn-elimina")) {
-    mete = mete.filter(item => item.id !== id);
+  if (action === "elimina") {
+    mete.splice(idx, 1);
     render();
     mostraNotifica("Meta eliminata");
-  } else if (btn.classList.contains("btn-modifica")) {
-    const li = btn.closest("li");
-    avviaModifica(m, li);
-  } else {
-    m.visitato = !m.visitato;
+  } else if (action === "modifica") {
+    avviaModifica(mete[idx], btn.closest("li"));
+  } else if (action === "toggle") {
+    mete[idx].visitato = !mete[idx].visitato;
+    render();
+  } else if (action === "up" && idx > 0) {
+    [mete[idx], mete[idx - 1]] = [mete[idx - 1], mete[idx]];
+    document.getElementById("ordine-selezionato").value = "manuale";
+    render();
+  } else if (action === "down" && idx < mete.length - 1) {
+    [mete[idx], mete[idx + 1]] = [mete[idx + 1], mete[idx]];
+    document.getElementById("ordine-selezionato").value = "manuale";
     render();
   }
 });
@@ -237,6 +248,7 @@ if (salvatoTema) {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+// Integrata nell'event listener del container sopra. 
 
 /* ESPORTAZIONE / IMPORTAZIONE JSON (cerca tu su MDN)
    - Esporta: crea un Blob con JSON.stringify(stato), genera un URL con
@@ -247,12 +259,14 @@ if (salvatoTema) {
 
 /* SCRIVI QUI LA TUA RISPOSTA */
 
+
 /* STATISTICHE GRAFICHE
    Almeno due indicatori: contatori grandi e/o barre orizzontali
    (<div> con width: X% in base al dato). Aggiorna dentro render().
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+// è stato integrato nel render() tramite stat-totale e barra-riempimento.
 
 /* MULTI-VISTA — lista / card / tabella
    Una variabile globale "vista" che render() legge per decidere quale HTML
@@ -260,6 +274,7 @@ if (salvatoTema) {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+
 
 /* CATEGORIE
    Aggiungi un campo categoria nello schema. Nel form un <select> per sceglierla.
@@ -278,7 +293,7 @@ function avviaModifica(metaObj, li) {
   input.className = "edit-input";
   
   const btnSalva = document.createElement("button");
-  btnSalva.textContent = "Modifica";
+  btnSalva.textContent = "Salva";
   btnSalva.className = "btn-salva";
   
   const termina = () => {
