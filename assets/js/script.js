@@ -21,11 +21,11 @@ REGOLE
 
 /* SCRIVI QUI LA TUA RISPOSTA */
 let mete = [
-  { meta: "Tokyo", continente: "Asia", anno: 2019, visitato: true, categoria: "Culturale" },
-  { meta: "Parigi", continente: "Europa", anno: 2021, visitato: true, categoria: "Culturale" },
-  { meta: "Roma", continente: "Europa", anno: 2023, visitato: true, categoria: "Culturale" },
-  { meta: "New York", continente: "America", anno: 2025, visitato: false, categoria: "Relax" },
-  { meta: "Londra", continente: "Europa", anno: 2026, visitato: false, categoria: "Relax" }
+  { id: 1, meta: "Tokyo", continente: "Asia", anno: 2019, visitato: true, categoria: "Culturale" },
+  { id: 2, meta: "Parigi", continente: "Europa", anno: 2021, visitato: true, categoria: "Culturale" },
+  { id: 3, meta: "Roma", continente: "Europa", anno: 2023, visitato: true, categoria: "Culturale" },
+  { id: 4, meta: "New York", continente: "America", anno: 2025, visitato: false, categoria: "Relax" },
+  { id: 5, meta: "Londra", continente: "Europa", anno: 2026, visitato: false, categoria: "Relax" }
 ];
 let isDarkMode = false;
 let vista = "lista";
@@ -84,22 +84,13 @@ function render() {
           <span class="testo-meta">${m.meta}</span>
           <span class="dettaglio-meta">${m.continente} — ${m.anno} — <strong>${m.categoria}</strong></span>
           <div class="gruppo-pulsanti">
-            <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}">
+            <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}" data-id="${m.id}">
               ${m.visitato ? "Visitato" : "Da visitare"}
             </button>
-            <button class="btn-modifica">Modifica</button>
-            <button class="btn-elimina">Elimina</button>
+            <button class="btn-modifica" data-id="${m.id}">Modifica</button>
+            <button class="btn-elimina" data-id="${m.id}">Elimina</button>
           </div>
         `;
-
-        li.querySelector("button").onclick = () => { m.visitato = !m.visitato; render(); };
-        li.querySelector(".btn-elimina").onclick = () => { 
-            mete.splice(mete.indexOf(m), 1); 
-            render(); 
-            mostraNotifica("Meta eliminata");
-        };
-        li.querySelector(".btn-modifica").onclick = () => avviaModifica(m, li);
-
         container.appendChild(li);
       });
     });
@@ -111,6 +102,9 @@ function render() {
   document.getElementById("stat-visitati").textContent = visitati;
   document.getElementById("stat-da-visitare").textContent = tot - visitati;
   document.getElementById("barra-riempimento").style.width = tot > 0 ? (visitati / tot) * 100 + "%" : "0%";
+
+  localStorage.setItem("dati", JSON.stringify(mete));
+  localStorage.setItem("dark", JSON.stringify(isDarkMode));
 }
 
 /* FORM CON VALIDAZIONE
@@ -125,13 +119,27 @@ function render() {
 /* SCRIVI QUI LA TUA RISPOSTA */
 document.getElementById("form-viaggio").addEventListener("submit", (e) => {
   e.preventDefault();
+  
+  const meta = document.getElementById("input-meta").value.trim();
+  const continente = document.getElementById("input-continente").value.trim();
+  const anno = document.getElementById("input-anno").value.trim();
+  const categoria = document.getElementById("input-categoria").value;
+  const visitato = document.getElementById("select-stato").value === "true";
+
+  if (!meta || !continente || !anno) {
+    mostraNotifica("Errore: compila tutti i campi!");
+    return;
+  }
+
   mete.push({
-    meta: document.getElementById("input-meta").value,
-    continente: document.getElementById("input-continente").value,
-    anno: document.getElementById("input-anno").value,
-    categoria: document.getElementById("input-categoria").value,
-    visitato: document.getElementById("select-stato").value === "true"
+    id: Date.now(),
+    meta,
+    continente,
+    anno,
+    categoria,
+    visitato
   });
+  
   e.target.reset();
   render();
   mostraNotifica("Meta aggiunta");
@@ -145,6 +153,26 @@ document.getElementById("form-viaggio").addEventListener("submit", (e) => {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+document.getElementById("lista-mete").addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  
+  const id = parseInt(btn.dataset.id);
+  const m = mete.find(el => el.id === id);
+  if (!m) return;
+
+  if (btn.classList.contains("btn-elimina")) {
+    mete = mete.filter(item => item.id !== id);
+    render();
+    mostraNotifica("Meta eliminata");
+  } else if (btn.classList.contains("btn-modifica")) {
+    const li = btn.closest("li");
+    avviaModifica(m, li);
+  } else {
+    m.visitato = !m.visitato;
+    render();
+  }
+});
 
 /* RICERCA, FILTRO, ORDINAMENTO
    - Ricerca live: <input> con event "input". Salva in stato e render().
@@ -194,6 +222,14 @@ document.getElementById("btn-tema").onclick = () => {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
+const salvatoDati = localStorage.getItem("dati");
+if (salvatoDati) mete = JSON.parse(salvatoDati);
+
+const salvatoTema = localStorage.getItem("dark");
+if (salvatoTema) {
+    isDarkMode = JSON.parse(salvatoTema);
+    document.body.classList.toggle("dark-mode", isDarkMode);
+}
 
 /* RIORDINO ↑ ↓
    Due button su ogni elemento. Click su ↑ scambia con il precedente nell'array,
