@@ -61,19 +61,34 @@ function render() {
   else if (ordine === "meta-az") visualizzati.sort((a, b) => a.meta.localeCompare(b.meta));
   else if (ordine === "meta-za") visualizzati.sort((a, b) => b.meta.localeCompare(a.meta));
 
-  container.className = vista;
+  container.className = "view-" + vista;
   container.innerHTML = "";
 
   if (visualizzati.length === 0) {
     container.innerHTML = `<li class="meta-item" style="text-align: center; color: #6b7566;">Nessuna meta trovata</li>`;
   } else {
     if (vista === "tabella") {
-        container.innerHTML = `<table><thead><tr><th>Meta</th><th>Continente</th><th>Anno</th></tr></thead><tbody id="tabella-body"></tbody></table>`;
+        container.innerHTML = `<div class="table-wrapper"><table><thead><tr><th>Meta</th><th>Continente</th><th>Anno</th></tr></thead><tbody id="tabella-body"></tbody></table></div>`;
         const body = document.getElementById("tabella-body");
         visualizzati.forEach(m => {
             const tr = document.createElement("tr");
             tr.innerHTML = `<td>${m.meta}</td><td>${m.continente}</td><td>${m.anno}</td>`;
             body.appendChild(tr);
+        });
+    } else if (vista === "card") {
+        visualizzati.forEach(m => {
+            const li = document.createElement("li");
+            li.className = `meta-item ${m.visitato ? "visitato" : "da-visitare"}`;
+            li.innerHTML = `
+                <span class="testo-meta">${m.meta}</span>
+                <span class="dettaglio-meta">${m.continente} — ${m.anno}</span>
+                <div class="gruppo-pulsanti">
+                  <button class="${m.visitato ? "btn-stato-visitato" : "btn-stato-da-visitare"}" data-id="${m.id}" data-action="toggle">
+                    ${m.visitato ? "Visitato" : "Da visitare"}
+                  </button>
+                </div>
+            `;
+            container.appendChild(li);
         });
     } else {
         const raggruppati = visualizzati.reduce((acc, m) => {
@@ -274,7 +289,15 @@ if (salvatoTema) {
 */
 
 /* SCRIVI QUI LA TUA RISPOSTA */
-
+["lista", "card", "tabella"].forEach(v => {
+    const btn = document.getElementById(`btn-vista-${v}`);
+    if (btn) {
+        btn.onclick = () => {
+            vista = v;
+            render();
+        };
+    }
+});
 
 /* CATEGORIE
    Aggiungi un campo categoria nello schema. Nel form un <select> per sceglierla.

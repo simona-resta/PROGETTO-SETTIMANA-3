@@ -82,11 +82,19 @@
       <div class="controllo-item ordine-medio">
         <label>Ordine</label>
         <select id="ordine-selezionato">
+          <option value="manuale">Manuale</option>
           <option value="anno-crescente">Anno crescente</option>
           <option value="anno-decrescente">Anno decrescente</option>
           <option value="meta-az">Alfabetico (A-Z)</option>
           <option value="meta-za">Alfabetico (Z-A)</option>
         </select>
+      </div>
+
+      <div class="controllo-item vista-medio">
+        <label>Vista</label>
+        <button id="btn-vista-lista">Lista</button>
+        <button id="btn-vista-card">Card</button>
+        <button id="btn-vista-tabella">Tabella</button>
       </div>
     </section>
 
@@ -108,8 +116,8 @@
     </section>
 
     <section class="sezione-lista">
-      <ul id="lista-mete">
-      </ul>
+      <div id="lista-mete">
+      </div>
     </section>
 
   </div>

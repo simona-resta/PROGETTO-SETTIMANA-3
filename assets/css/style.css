@@ -85,7 +85,7 @@ h2 {
 .campo-form {
   display: inline-block;
   vertical-align: bottom;
-  width: 14%; 
+  width: 14%;
   margin-right: 1%;
 }
 
@@ -119,16 +119,16 @@ h2 {
 
 .btn-aggiungi {
   display: inline-block;
-  vertical-align: bottom; 
+  vertical-align: bottom;
   background: #d6a374;
   color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
   font-weight: bold;
-  margin-left: 0; 
+  margin-left: 0;
   cursor: pointer;
-  height: 42px; 
+  height: 42px;
 }
 
 .btn-aggiungi:hover {
@@ -200,7 +200,7 @@ h2 {
 }
 
 .text-verde strong { color: #9cbfa2; }
-.text-blu strong { color: #adb59e; }
+.text-da-visitare strong { color: #5897cf; }
 
 .barra-grigia {
   background: #ebdccb;
@@ -226,7 +226,7 @@ h2 {
 .meta-item {
   padding: 15px 20px;
   margin-bottom: 10px;
-  border-left: 5px solid #e5dfd3; 
+  border-left: 5px solid #e5dfd3;
   overflow: hidden;
 }
 
@@ -235,7 +235,7 @@ h2 {
 }
 
 .meta-item.da-visitare {
-  border-left: 5px solid #9ac5e8;
+  border-left: 5px solid #5897cf;
 }
 
 .testo-meta {
@@ -270,7 +270,7 @@ h2 {
 
 .btn-stato-visitato:hover, .btn-stato-da-visitare:hover { opacity: 1; }
 .btn-stato-visitato { background: #9cbfa2; }
-.btn-stato-da-visitare { background: #9ac5e8; }
+.btn-stato-da-visitare { background: #5897cf; }
 
 .btn-modifica, .btn-elimina {
   background: #fbf7f0;
@@ -308,7 +308,7 @@ footer {
 body.dark-mode { background: #181818; color: #e0e0e0; }
 body.dark-mode header { background: #252525; border-bottom: 1px solid #444; }
 body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 { color: #fff; }
-body.dark-mode .sezione-form, body.dark-mode .sezione-controlli, 
+body.dark-mode .sezione-form, body.dark-mode .sezione-controlli,
 body.dark-mode .box-statistiche, body.dark-mode .meta-item {
   background: #252525;
   border-color: #444;
@@ -383,14 +383,117 @@ body.dark-mode .edit-input {
   background: #e5dfd3;
 }
 
-body.dark-mode [data-action="up"], 
+body.dark-mode [data-action="up"],
 body.dark-mode [data-action="down"] {
   background: #333;
   border-color: #555;
   color: #eee;
 }
 
-body.dark-mode [data-action="up"]:hover, 
+body.dark-mode [data-action="up"]:hover,
 body.dark-mode [data-action="down"]:hover {
   background: #444;
+}
+
+#btn-vista-lista,
+#btn-vista-card,
+#btn-vista-tabella {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #cbd5c5;
+  border-radius: 6px;
+  color: #3a4738;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: all 0.2s ease;
+}
+
+#btn-vista-lista:hover,
+#btn-vista-card:hover,
+#btn-vista-tabella:hover {
+  background: #fbf7f0;
+  border-color: #9cbfa2;
+}
+
+body.dark-mode #btn-vista-lista,
+body.dark-mode #btn-vista-card,
+body.dark-mode #btn-vista-tabella {
+  background: #252525;
+  border-color: #444;
+  color: #fff;
+}
+
+body.dark-mode #btn-vista-lista:hover,
+body.dark-mode #btn-vista-card:hover,
+body.dark-mode #btn-vista-tabella:hover {
+  background: #333;
+  border-color: #555;
+}
+
+.view-card .meta-item {
+  display: inline-block;
+  width: 31%;
+  margin: 1%;
+  vertical-align: top;
+  border-left: 1px solid #e5dfd3;
+  padding: 20px;
+}
+
+.view-tabella .meta-item {
+  display: none;
+}
+
+.table-wrapper {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5dfd3;
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+}
+
+.view-tabella .table-wrapper {
+  display: block;
+}
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper th {
+  background: #fbf7f0;
+  color: #3a4738;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #e5dfd3;
+}
+
+.table-wrapper td {
+  padding: 12px;
+  border-bottom: 1px solid #e5dfd3;
+  color: #6b7566;
+}
+
+body.dark-mode .view-card .meta-item {
+  background: #252525;
+  border: 1px solid #444;
+}
+
+body.dark-mode .table-wrapper {
+  background: #252525;
+  border: 1px solid #444;
+}
+
+body.dark-mode .table-wrapper th {
+  background: #333;
+  color: #fff;
+  border-bottom: 2px solid #444;
+}
+
+body.dark-mode .table-wrapper td {
+  border-bottom: 1px solid #444;
+  color: #bbb;
 }
