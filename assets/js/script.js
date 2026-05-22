@@ -237,6 +237,7 @@ function mostraNotifica(testo) {
 document.getElementById("btn-tema").onclick = () => {
   isDarkMode = !isDarkMode;
   document.body.classList.toggle("dark-mode", isDarkMode);
+  document.getElementById("btn-tema").textContent = isDarkMode ? "Tema chiaro" : "Tema scuro";
 };
 
 /* PERSISTENZA — localStorage (cerca tu su MDN)
@@ -255,6 +256,7 @@ const salvatoTema = localStorage.getItem("dark");
 if (salvatoTema) {
     isDarkMode = JSON.parse(salvatoTema);
     document.body.classList.toggle("dark-mode", isDarkMode);
+    document.getElementById("btn-tema").textContent = isDarkMode ? "Tema chiaro" : "Tema scuro";
 }
 
 /* RIORDINO ↑ ↓
